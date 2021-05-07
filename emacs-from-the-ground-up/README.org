@@ -1,0 +1,113 @@
+Start emacs with: `TERM=xterm-256color emacs -q`
+
+* Key
+
+M-x  : run function
+C-g  : stop the current action
+
+* Functions
+** Get info
+
+| Function          | Notes                                            |
+|-------------------+--------------------------------------------------|
+| describe-function |                                                  |
+| describe-variable |                                                  |
+| describe-mode     | Get mode documetation                            |
+| info              | An info browser (sudo dnf install -y info first) |
+
+
+** Window navigation
+
+| Function                              | Notes |
+|---------------------------------------+-------|
+| split-window-vertically               |       |
+| other-window  (go to the next window) |       |
+
+
+** File management
+
+| find-file          |
+| save-buffer        |
+
+** Buffer window
+
+| kill-buffer        |
+| switch-to-buffer   |
+
+** Buffer navigation
+
+| previous-line       |
+| next-line           |
+| beginning-of-buffer |
+| end-of-buffer       |
+
+| search-forward      |
+| isearch-forward     |
+
+** Copy paste and selection
+
+| Function          | Notes             |
+|-------------------+-------------------|
+| mark-whole-buffer | select all        |
+| set-mark-command  | start a selection |
+| kill-ring-save    | copy the region   |
+| kill-region       | cut the region    |
+| yank              | paste the region  |
+
+** Pimp my emacs
+
+| Function      | Notes                   |
+|---------------+-------------------------|
+| menu-bar-mode | toggle the top menu bar |
+
+** Elisp
+
+| Function       | Notes                              |
+|----------------+------------------------------------|
+| eval-last-sexp | run the lisp command behind cursor |
+| eval-buffer    | run lisp commands from the buffer  |
+
+* Packages
+
+For example, to setup vim binding and ivy/counsel:
+
+#+BEGIN_SRC elisp
+(message "Hello world")
+
+;; Set up package.el to work with MELPA
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
+(package-initialize)
+(package-refresh-contents)
+
+;; Evil (vim key binding)
+(unless (package-installed-p 'evil)
+  (package-install 'evil))
+(require 'evil)
+(evil-mode 1)
+
+;; Ivy (auto completion)
+(unless (package-installed-p 'ivy)
+  (package-install 'ivy))
+(require 'ivy)
+(ivy-mode)
+
+;; Further improve the M-x experience by adding shortcut info
+(package-install 'counsel)
+(counsel-mode)
+#+END_SRC
+
+** flycheck : run check and provide feedback
+#+BEGIN_SRC elisp
+(package-install 'flycheck)
+
+(global-set-key (kbd "<f3>") 'flycheck-next-error)
+
+;; enable font-lock for syntax highlighting, don't forget to set the TERM env
+;; to: TERM=xterm-256color
+(global-font-lock-mode)
+#+END_SRC
+
+** projectile
+** magit
