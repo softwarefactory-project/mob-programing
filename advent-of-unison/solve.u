@@ -1,0 +1,36 @@
+-- | Solutions to the day01
+
+sequence_go : [a] -> [Optional a]  -> Optional [a]
+sequence_go acc = cases
+      [] -> Some acc
+      (Some a) +: rest -> sequence_go (acc ++ [a]) rest
+      _ -> None
+
+
+sequence : [Optional a] -> Optional [a]
+sequence = sequence_go []
+
+testIncrement : Optional (Nat, Nat) -> Nat -> Optional (Nat, Nat)
+testIncrement acc x =
+     let newCount = match acc with
+           None -> 0
+           Some (count, prev) -> if (x > prev) then count + 1 else count
+         Some (newCount, x)
+
+countIncrement : [Nat] -> Optional Nat
+countIncrement xs =
+  List.foldLeft testIncrement None xs
+    |> Optional.map Tuple.at1
+
+-- solve : Text -> Optional Nat
+solve input =
+   let result = Text.split ?\n input
+                  |> List.map Nat.fromText
+                  |> sequence
+                  |> Optional.map countIncrement
+       match result with
+         Some (Some x) -> Some x
+         _ -> None
+
+
+> solve "199\n200\n208\n210\n200\n207\n240\n269\n260\n263"
